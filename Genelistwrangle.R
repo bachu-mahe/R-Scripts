@@ -142,3 +142,23 @@ r <- q+geom_text_repel(data=dplyr::filter(mtc, symbol %in% c("Ctsz",
 r + geom_vline(xintercept = c(-1,1)) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 ###############################################################################################################################
+# FACETING 
+# To do ...
+#   - multiple small multiple charts
+
+library(ggplot2)
+# Basic barplot
+colnames(damup_list)
+forbar <- dplyr::select(damup_list, symbol, WtP2, KOP2, KOP3)
+glimpse(forbar)
+
+#Creating a long table from a wide table
+library(tidyr)
+forbar.l <- gather(forbar, key = "Genotype", value = "CPM" , WtP2,KOP2,KOP3)
+head(forbar.l)
+tail(forbar.l)
+colnames(forbar.l)
+library(ggplot2)
+
+plot <- ggplot(forbar.l, aes(x = symbol, y = CPM, fill = Genotype)) + geom_bar(stat = "identity", position=position_dodge())
+plot + facet_wrap(~ symbol, nrow = 20, ncol = 20)
