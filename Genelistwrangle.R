@@ -105,9 +105,15 @@ p <- ggplot(mtc, aes(log2FoldChange, -log10(pvalue))) +
   geom_point(aes(col=Dam.Gene), size =1, alpha = 1) + scale_color_manual(values=c("grey", "red")) + 
   theme_bw(base_size = 10) 
 p
+#plot over points
+q <- ggplot(mtc, aes(log2FoldChange, -log10(pvalue))) +
+  geom_point(aes(col=Dam.Gene), size =1, alpha = 1, color = 'grey') + 
+geom_point(data = subset(mtc, Dam.Gene == 'Yes'), color = 'red') + theme_bw(base_size = 10)
+q
+
 library(ggrepel)
 #Select your gene of interest using the row number of excel sheet
-r <- p+geom_text_repel(data=dplyr::filter(mtc, symbol %in% c("Ctsz",
+r <- q+geom_text_repel(data=dplyr::filter(mtc, symbol %in% c("Ctsz",
                                                              "Ctss",
                                                              "Apoe",
                                                              "Apoc1",
