@@ -159,6 +159,20 @@ head(forbar.l)
 tail(forbar.l)
 colnames(forbar.l)
 library(ggplot2)
-
-plot <- ggplot(forbar.l, aes(x = symbol, y = CPM, fill = Genotype)) + geom_bar(stat = "identity", position=position_dodge())
-plot + facet_wrap(~ symbol, nrow = 20, ncol = 20)
+###############################################################################################################################
+#Generates a tiff file with all the Individual genes
+tiff('DAMUp-Facet.tiff', units="in", width=25, height=25, res=150)
+plot <- ggplot(forbar.l, aes(x = symbol, y = CPM, fill = Genotype)) + geom_bar(position="dodge",stat = "identity") + theme_bw(base_size = 10) 
+#The scales argument gives both flexible x- and y-axis, if you want y-axis  fexible say y_free
+multi.plot <- plot + facet_wrap(~symbol, nrow = 30, ncol = 15, scales = "free")
+dev.off()
+#Generates multipage PDF but cannot control y-axis despite adding using scale = free option
+#https://github.com/guiastrennec/ggplus
+#devtools::install_github("guiastrennec/ggplus")
+library(ggplus)
+pdf('multiple_page_plot.pdf')
+facet_multiple(plot = multi.plot, 
+               facets = 'symbol', 
+               ncol = 6, 
+               nrow = 6, scale = "free")
+dev.off()
