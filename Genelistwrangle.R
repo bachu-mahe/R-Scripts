@@ -166,7 +166,7 @@ plot <- ggplot(forbar.l, aes(x = symbol, y = CPM, fill = Genotype)) + geom_bar(p
 #The scales argument gives both flexible x- and y-axis, if you want y-axis  fexible say y_free
 multi.plot <- plot + facet_wrap(~symbol, nrow = 30, ncol = 15, scales = "free")
 dev.off()
-#Generates multipage PDF but cannot control y-axis despite adding using scale = free option
+#Generates multipage PDF and control y-axis despite adding using scale = free option
 #https://github.com/guiastrennec/ggplus
 #devtools::install_github("guiastrennec/ggplus")
 library(ggplus)
@@ -176,3 +176,26 @@ facet_multiple(plot = multi.plot,
                ncol = 6, 
                nrow = 6, scale = "free")
 dev.off()
+###############################################################################################################################
+#Generates multipage line plot to PDF and control y-axis despite adding using scale = free option
+write.csv(forbar.l, file = "/Users/bachum/Desktop/MEF-Memory/tables/KO-Mem-Up-Filter-Long.csv", row.names = T)
+forbar.l <- read_csv(file = "/Users/bachum/Desktop/MEF-Memory/tables/KO-Mem-Up-Filter-Long.csv", col_names = T)
+head(forbar.l)
+tail(forbar.l)
+colnames(forbar.l)
+library(ggplot2)
+# Change line types + colors
+plot <- ggplot(forbar.l, aes(x=Time, y=CPM, group=group1)) +
+  geom_line(aes(linetype=Genotype, color=group1)) +
+  geom_point(aes(color=group1)) +
+  theme(legend.position="right") 
+plot <- plot + theme_bw(base_size = 10) 
+library(ggplus)
+pdf('multiple_page_plot.pdf')
+facet_multiple(plot = plot, 
+               facets = 'Id', 
+               ncol = 4, 
+               nrow = 4, scale = "free")
+dev.off()
+###############################################################################################################################
+
